@@ -1,6 +1,10 @@
 #ifndef LINKQUEUE_H_INCLUDED
 #define LINKQUEUE_H_INCLUDED
 
+/*
+2.5.2019 @ 9PM - not working 
+
+*/
 
 
 class LinkQueue{
