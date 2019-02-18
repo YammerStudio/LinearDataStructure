@@ -117,18 +117,31 @@ public:
 
 
 int main(){
-   DoubleQueue s1;
+     DoubleQueue s1;
    s1.front_add(10);
    s1.front_add(20);
    s1.front_add(30);
    s1.front_add(40);
    s1.print();
 
+
+    cout << "Removing front value.. " << s1.remove_atFront() << endl;
+    cout << "Removing front value.. " << s1.remove_atFront() << endl;
+    s1.print();
+
+    cout << "_------------------------------------_" << endl;
    s1.back_add(100);
    s1.back_add(200);
    s1.back_add(300);
    s1.back_add(400);
+   s1.print();
+
+
+   cout << "Removing back value..." << s1.remove_atBack() << endl;
+   cout << "Removing back value..." << s1.remove_atBack() << endl;
+   cout << "Removing back value..." << s1.remove_atBack() << endl;
 
    s1.print();
+
 
 }
