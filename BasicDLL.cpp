@@ -31,7 +31,17 @@ public:
         tail = 0;
         counter = 0;
     }
-    //~DoubleQueue();
+    ~DoubleQueue(){
+        node* n = head;
+        
+        while(n != 0){
+            n = n->next;
+            delete head;
+            head = n;
+        }
+        delete head;
+        cout << "Memory has been deleted.." << endl;
+    }
     bool isEmpty(){
         return head == 0;
     }
