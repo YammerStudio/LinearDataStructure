@@ -64,8 +64,31 @@ public:
         }
     }
 
-    int remove_atFront();
-    int remove_atBack();
+    int remove_atFront(){
+        int k;
+        if(isEmpty()){
+            return -11;
+        }
+        node* n = head;
+        k = n->data;
+        head = head->next;
+        delete n;
+        head->prev = nullptr;
+        return k;
+    }
+    int remove_atBack(){
+        int j;
+        if(isEmpty()){
+            return -11;
+        }
+        node* temp = tail;
+        j = temp->data;
+        tail = tail->prev;
+        delete temp;
+        tail->next = nullptr;
+        return j;
+    }
+
 
     void print(){
         for(node* first = head; first != 0; first = first->next){
