@@ -42,24 +42,36 @@ public:
         moi->next = head;
         head->prev = moi;
         head = moi;
+
     } else {
-        //else meaning new node is greater than head
-          while(head->next != 0 && head->next->data < moi->data){
+            //else meaning new node is greater than head
+            node* h = head;
 
-            head = head->next;
+            while(h->next != 0){
+                h = h->next;
 
-            //if new node is not insreted at end of list
-            if(head-> next != 0){
-                moi->next->prev = moi;
+                if(moi->name < h->name){
+                    //insertion
+                    moi->next = h;
+                    moi->prev = h->prev;
+                    moi->prev->next = moi;
+                    h->prev = moi;
+                } else if(h->next == 0 && moi->name > h->name){
+                    h->next = moi;
+                    moi->prev = h;
+                }
             }
+                //assuming that at last element, so h->next has to be null after going through loop
+                //h->next = moi;
+                //moi->prev = h;
 
-            head->next = moi;
-            moi->prev = head;
-          }
-    }
+
+        }
+
   }
   void insertWeight(string w, int k){
     node* moi = new node(w, k);
+
     if(wHead == 0){
       wHead = moi;
     }
@@ -67,42 +79,45 @@ public:
           moi->next = wHead;
           wHead->prev = moi;
           wHead = moi;
-        } else {
+    } else {
           //assuming that new node is bigger than wHead
-          while(wHead->next != 0 && wHead->next->data < moi->data){
+          node* wH = wHead;
+          while(wH->next != 0){
 
-            wHead = wHead->next;
+            wH = wH->next;
 
-            //make approiate link?
-            moi->next = wHead->next;
-
-            //if new node is no inserted at tend of list:
-            if(wHead->next != 0){
-                moi->next->prev = moi;
+            if(moi->data < wH->data){
+              //tranvseral
+              moi->next = wH;
+              moi->prev = wH->prev;
+              moi->prev->next = moi;
+              wH->prev = moi;
+            } else if(wH->next == 0 && moi->data > wH->data){
+                wH->next = moi;
+                moi->prev = wH;
             }
-
-            wHead->next = moi;
-            moi->prev = wHead;
           }
+          //wH->next = moi;
+          //moi->prev = wH;
         }
-  }
+    }
 
 
   void printName(){
-      std::cout << "printing name now: " << std::endl;
-    while(head != 0){
-        std::cout << head->name << " - " << head->data << endl;
-        head = head->next;
+    node* h = head;
+    cout << "Printing names in alphabetical order: " << endl;
+    while(h != 0){
+        cout << h->name << " - " << h->data << endl;
+        h = h->next;
     }
-    cout << endl;
   }
   void printWeight(){
-      std::cout << "printing weight now: " << std::endl;
-    while(head != 0){
-        std::cout << wHead->name << " - " << wHead->data << endl;
-        wHead = wHead->next;
+    node* h = wHead;
+    cout << "Printing weight in order: " << endl;
+    while(h != 0){
+        cout << h->name << " - " << h->data << endl;
+        h = h->next;
     }
-    cout << endl;
   }
 };
 
@@ -113,18 +128,23 @@ int main(){
 
   string n;
   int weight;
-  int k = 3;
-  do {
+  int i = 0;
+  while(i != 3){
+    i++;
   cout << "enter in name: ";
   cin >> n;
   cout << "Enter in weight: ";
   cin >> weight;
   s1.insertName(n,weight);
   s1.insertWeight(n, weight);
-  k--;
-  }while(k > 0);
+  }
 
   s1.printName();
+  cout << endl;
+  cout << endl;
   s1.printWeight();
+
+   cout << endl;
+  cout << endl;
   return 0;
 }
