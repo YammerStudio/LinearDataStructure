@@ -7,156 +7,124 @@ Assignment:
 
 tldr: in-order insertion doubly linked list. 
 */
-
 #include <iostream>
 #include <string>
 
-struct node {
+using namespace std;
 
-  std::string name;
-  int data;
-  node* next, * prev;
-  node(int d, std::string n, node* ne = 0, node* p = 0){
-    data = d;
-    name = n;
-    next = ne;
-    prev = p;
-  }
+
+struct node {
+    string name;
+    int data;
+    node* next, * prev;
+
+    node(string n, int d, node* ne = 0, node* p = 0){
+      name = n;
+      data = d;
+      next = ne;
+      prev = p;
+    }
 };
 
-
-class DList {
-
+class DLongList{
 private:
-node* head, *wHead;
-
+  node* head, * wHead;
 public:
-  DList(){
+  DLongList(){
     head = wHead = 0;
   }
 
-  void insertName(std::string n, int d){
-    node* temp = new node(d, n);
-    node* foo = head;
-
-    if(foo != 0){
-      //less than head
-      if(temp->name < foo->name){
-        temp->next = foo;
-        foo->prev = temp;
-        foo = temp;
-      } else {
-        //not empty, and greater than head.
-        while(foo->next != 0){
-          foo = foo->next;
-
-          if(temp->name < foo->name ){
-            //insert
-            temp->next = foo;
-            temp->prev = foo->prev;
-
-            foo->prev = temp;
-            temp->prev->next = temp;
-          }
-        }
-
-        if(foo->next == 0){
-        //inside else, after while loop when head->next = null
-        foo->next = temp;
-        temp->prev = foo;
-        std::cout << "insertname_shouldwork\n";
-        }
-      }
+  void insertName(string n, int d){
+    node * moi = new node(n, d);
+    if(head == 0 ){
+      head = moi;
+    } else if(moi->name < head->name){
+        moi->next = head;
+        head->prev = moi;
+        head = moi;
     } else {
-      //fails initial condition, meaning foo is empty
-      foo = head;
+        //else meaning new node is greater than head
+          while(head->next != 0 && head->next->data < moi->data){
+
+            head = head->next;
+
+            //if new node is not insreted at end of list
+            if(head-> next != 0){
+                moi->next->prev = moi;
+            }
+
+            head->next = moi;
+            moi->prev = head;
+          }
     }
   }
+  void insertWeight(string w, int k){
+    node* moi = new node(w, k);
+    if(wHead == 0){
+      wHead = moi;
+    }
+    else if(moi->data < wHead->data){
+          moi->next = wHead;
+          wHead->prev = moi;
+          wHead = moi;
+        } else {
+          //assuming that new node is bigger than wHead
+          while(wHead->next != 0 && wHead->next->data < moi->data){
 
-  void insertWeight(std::string n, int d){
-    //case 1: empty
-    node* moi = new node(d, n);
-    node* wH = wHead;
+            wHead = wHead->next;
 
-    if(wH != 0){
-      //less than head
-      if(moi->data < wH->data){
-        moi->next = wH;
-        wH->prev = moi;
-        wH = moi;
-      } else {
-        //not empty, and greater than
-        while(wH->next != 0){
-          wH = wH->next;
-          //less than tranversal
-          if(moi->data < wH->data){
-              moi->next = wH;
-              moi->prev = wH->prev;
+            //make approiate link?
+            moi->next = wHead->next;
 
-              wH->prev = moi;
-              moi->prev->next = moi;
+            //if new node is no inserted at tend of list:
+            if(wHead->next != 0){
+                moi->next->prev = moi;
+            }
+
+            wHead->next = moi;
+            moi->prev = wHead;
           }
         }
-
-        //after while loop executes, which mean the head->next poitns to null, we can insert last element'
-        if(wH->next == 0){
-        wH->next = moi;
-        moi->prev = wH;
-        }
-      }
-    } else {
-      //meaning wH is empty
-      wH = moi;
-    }
-
   }
-  void printNames(){
-
-     std::cout << std::endl;
-
-     std::cout << "Names in alphabetical order: " << std::endl;
-
-     for(node* temp = head; temp != 0; temp = temp->next){
-         std::cout << temp->name << " - " << temp->data << std::endl;
-     }
-     std::cout << std::endl;
-   }
-
-   void printWeights(){
-
-     std::cout << std::endl;
-     std::cout << "Weights in ascending order: " << std::endl;
-    for(node* temp = wHead; temp != 0; temp = temp->next){
-         std::cout << temp->name << " - " << temp->data << std::endl;
-     }
-     std::cout << std::endl;
-
-   }
 
 
+  void printName(){
+      std::cout << "printing name now: " << std::endl;
+    while(head != 0){
+        std::cout << head->name << " - " << head->data << endl;
+        head = head->next;
+    }
+    cout << endl;
+  }
+  void printWeight(){
+      std::cout << "printing weight now: " << std::endl;
+    while(head != 0){
+        std::cout << wHead->name << " - " << wHead->data << endl;
+        wHead = wHead->next;
+    }
+    cout << endl;
+  }
 };
-
 
 
 int main(){
 
-   DList s1;
-   int weight;
-   std::string name;
+  DLongList s1;
 
-   for(int i = 0; i < 3;i++){
-   std::cout << "Enter in name: " << std::endl;
-   std::cin >> name;
-   std::cout << "Enter in weight: " << std::endl;
-   std::cin >> weight;
+  string n;
+  int weight;
+  int k = 3;
+  do {
+  cout << "enter in name: ";
+  cin >> n;
+  cout << "Enter in weight: ";
+  cin >> weight;
+  s1.insertName(n,weight);
+  s1.insertWeight(n, weight);
+  k--;
+  }while(k > 0);
 
-
-   s1.insertName(name, weight);
-   s1.insertWeight(name, weight);
-
-   s1.printNames();
-   s1.printWeights();
-   }
-
-    std::cout << "it worked right? " << std::endl;
+  s1.printName();
+  s1.printWeight();
+  return 0;
 }
