@@ -9,142 +9,94 @@ tldr: in-order insertion doubly linked list.
 */
 #include <iostream>
 #include <string>
-
 using namespace std;
-
-
 struct node {
-    string name;
     int data;
-    node* next, * prev;
+    string name;
+    node * next, * prev;
 
-    node(string n, int d, node* ne = 0, node* p = 0){
-      name = n;
+    node(int d, string na, node * ne = nullptr, node * p = nullptr){
       data = d;
+      name = na;
       next = ne;
       prev = p;
     }
 };
 
-class DLongList{
+class DList{
 private:
-  node* head, * wHead;
+  node* head;
+  //node *wHead;
 public:
-  DLongList(){
-    head = wHead = 0;
+  DList(){
+    head = nullptr;
+    //wHead = nullptr;
   }
 
-  void insertName(string n, int d){
-    node * moi = new node(n, d);
-    if(head == 0 ){
-      head = moi;
-    } else if(moi->name < head->name){
-        moi->next = head;
-        head->prev = moi;
-        head = moi;
+  void insertName(string n, int w){
+    node* temp = new node(w, n);
+    //node* h = head;
+    node* he = head;
+    if(head == 0){
+      head = temp;
+    } else if (temp->name < head->name){
+      temp->next = head;
+      head->prev = temp;
+      head = temp;
+    } else if(temp->name  > head->name && he->next != 0) {
+      //meaning new node is bigger than n
 
-    } else {
-            //else meaning new node is greater than head
-            node* h = head;
+      while(he->next != 0){
+        he = he->next;
 
-            while(h->next != 0){
-                h = h->next;
+            if(temp->name  > he->prev->name && temp->name  < he->name){
+            //not last element, and lest then current (tranversed head):
+            //need to rpelate head->prev, and head->prev->next = head;
 
-                if(moi->name < h->name){
-                    //insertion
-                    moi->next = h;
-                    moi->prev = h->prev;
-                    moi->prev->next = moi;
-                    h->prev = moi;
-                } else if(h->next == 0 && moi->name > h->name){
-                    h->next = moi;
-                    moi->prev = h;
-                }
+            //attaches new node on
+            temp->prev = he->prev;
+            temp->next = he;
+
+            //replaces links from prev, and head
+            he->prev->next = temp;
+            he->prev = temp;
+
             }
-                //assuming that at last element, so h->next has to be null after going through loop
-                //h->next = moi;
-                //moi->prev = h;
+      }
+    } else if (temp->name  > head->name && he->next == 0){
+        he->next = temp;
+        temp->prev = he;
 
-
-        }
-
+    }
+    //insertWeight(moi);
   }
-  void insertWeight(string w, int k){
-    node* moi = new node(w, k);
-
-    if(wHead == 0){
-      wHead = moi;
-    }
-    else if(moi->data < wHead->data){
-          moi->next = wHead;
-          wHead->prev = moi;
-          wHead = moi;
-    } else {
-          //assuming that new node is bigger than wHead
-          node* wH = wHead;
-          while(wH->next != 0){
-
-            wH = wH->next;
-
-            if(moi->data < wH->data){
-              //tranvseral
-              moi->next = wH;
-              moi->prev = wH->prev;
-              moi->prev->next = moi;
-              wH->prev = moi;
-            } else if(wH->next == 0 && moi->data > wH->data){
-                wH->next = moi;
-                moi->prev = wH;
-            }
-          }
-          //wH->next = moi;
-          //moi->prev = wH;
-        }
-    }
-
 
   void printName(){
-    node* h = head;
-    cout << "Printing names in alphabetical order: " << endl;
-    while(h != 0){
-        cout << h->name << " - " << h->data << endl;
-        h = h->next;
+    node* he = head;
+    while(he != 0){
+      cout << he->name << " " << he->data <<endl;
+      he = he->next;
+
     }
-  }
-  void printWeight(){
-    node* h = wHead;
-    cout << "Printing weight in order: " << endl;
-    while(h != 0){
-        cout << h->name << " - " << h->data << endl;
-        h = h->next;
-    }
+    cout << endl;
   }
 };
 
-
 int main(){
-
-  DLongList s1;
-
+  DList s1;
   string n;
-  int weight;
-  int i = 0;
-  while(i != 3){
-    i++;
-  cout << "enter in name: ";
-  cin >> n;
-  cout << "Enter in weight: ";
-  cin >> weight;
-  s1.insertName(n,weight);
-  s1.insertWeight(n, weight);
+  int w;
+
+  for(int i = 0;i < 5;i++){
+    cout << "Enter in name: ";
+    cin >> n;
+
+
+    cout << "Enter in weight: ";
+    cin >> w;
+
+    s1.insertName(n, w);
   }
 
   s1.printName();
-  cout << endl;
-  cout << endl;
-  s1.printWeight();
-
-   cout << endl;
-  cout << endl;
-  return 0;
 }
